@@ -1,4 +1,4 @@
-import { StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CreateOrganization from './src/screens/CreateOrganization';
@@ -6,21 +6,18 @@ import Home from './src/screens/Home';
 import Signup from './src/screens/Signup';
 
 const RootStack = createNativeStackNavigator({
-  initialRouteName: "home",
+  initialRouteName: 'home',
   screens: {
     home: Home,
     createOrganization: CreateOrganization,
-    signup: Signup
+    signup: Signup,
   },
-})
+});
 
 const Navigation = createStaticNavigation(RootStack);
 
 export default function App() {
-
-  return (
-    <Navigation />
-  );
+  return <Navigation />;
 }
 
 const styles = StyleSheet.create({
