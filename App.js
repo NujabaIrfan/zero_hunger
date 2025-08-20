@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CreateOrganization from './src/screens/CreateOrganization';
 import Home from './src/screens/Home';
 import Signup from './src/screens/Signup';
+import RestaurantList from './src/screens/RestaurantList';
 
 const RootStack = createNativeStackNavigator({
   initialRouteName: 'home',
@@ -11,6 +12,7 @@ const RootStack = createNativeStackNavigator({
     home: Home,
     createOrganization: CreateOrganization,
     signup: Signup,
+    restaurantList: RestaurantList,
   },
 });
 
