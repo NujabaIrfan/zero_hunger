@@ -15,6 +15,10 @@ export default function Home({}) {
         title="Create organization"
         onPress={() => navigator.navigate('createOrganization')}
       />
+      <Button
+        title="View Restaurants"
+        onPress={() => navigator.navigate('restaurantList')}
+      />
     </View>
   );
 }
