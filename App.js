@@ -6,6 +6,7 @@ import Home from './src/screens/Home';
 import Signup from './src/screens/Signup';
 import RestaurantList from './src/screens/RestaurantList';
 import Organizations from './src/screens/Organizations';
+import Organization from './src/screens/Organization';
 
 const RootStack = createNativeStackNavigator({
   initialRouteName: 'home',
@@ -15,6 +16,7 @@ const RootStack = createNativeStackNavigator({
     signup: Signup,
     restaurantList: RestaurantList,
     organizations: Organizations,
+    organization: Organization,
   },
 });
 

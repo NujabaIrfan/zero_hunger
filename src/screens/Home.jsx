@@ -20,8 +20,12 @@ export default function Home({}) {
         onPress={() => navigator.navigate('restaurantList')}
       />
       <Button
-        title="View Organizations"
+        title="Organizations"
         onPress={() => navigator.navigate('organizations')}
+      />
+      <Button
+        title="Organization"
+        onPress={() => navigator.navigate('organization')}
       />
     </View>
   );
