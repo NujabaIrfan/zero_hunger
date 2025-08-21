@@ -11,6 +11,7 @@ import {
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6';
 import OrganizationCard from '../components/OrganizationCard';
+import { useNavigation } from '@react-navigation/native';
 
 // temporary data
 const dummyData = [
@@ -93,6 +94,7 @@ const organizationSearchMode = {
 };
 
 const Organizations = () => {
+  const navigator = useNavigation();
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState(organizationSearchMode.ALL);
   let organizationData = dummyData;
@@ -237,7 +239,10 @@ const Organizations = () => {
           </View>
         )}
       </ScrollView>
-      <TouchableOpacity style={styles.newOrganizationIcon}>
+      <TouchableOpacity
+        style={styles.newOrganizationIcon}
+        onPress={() => navigator.navigate('createOrganization')}
+      >
         <FontAwesome6Icon name="plus" color="#ffffff" size={20} />
       </TouchableOpacity>
     </View>
