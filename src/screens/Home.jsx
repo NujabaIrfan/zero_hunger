@@ -19,6 +19,12 @@ export default function Home({}) {
         title="View Restaurants"
         onPress={() => navigator.navigate('restaurantList')}
       />
+
+      {/* Temporary button to redirect to the function */}
+      <Button 
+        title="Creat Request - NGO Member"
+        onPress={() => navigator.navigate('createFoodRequest')}
+      />
     </View>
   );
 }

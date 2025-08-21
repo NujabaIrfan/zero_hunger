@@ -5,6 +5,7 @@ import CreateOrganization from './src/screens/CreateOrganization';
 import Home from './src/screens/Home';
 import Signup from './src/screens/Signup';
 import RestaurantList from './src/screens/RestaurantList';
+import CreateFoodRequest from './src/screens/CreateFoodRequest';
 
 const RootStack = createNativeStackNavigator({
   initialRouteName: 'home',
@@ -13,6 +14,7 @@ const RootStack = createNativeStackNavigator({
     createOrganization: CreateOrganization,
     signup: Signup,
     restaurantList: RestaurantList,
+    createFoodRequest: CreateFoodRequest
   },
 });
 
