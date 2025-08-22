@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  FlatList, 
-  ActivityIndicator, 
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Keyboard 
+  Keyboard,
 } from 'react-native';
 import { db } from '../../firebaseConfig';
 import RestaurantCard from '../components/RestaurantCard';
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs } from 'firebase/firestore';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const RestaurantList = () => {
@@ -26,16 +26,16 @@ const RestaurantList = () => {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        console.log("📡 Fetching restaurants...");
-        const snapshot = await getDocs(collection(db, "restaurant"));
+        console.log('📡 Fetching restaurants...');
+        const snapshot = await getDocs(collection(db, 'restaurant'));
 
-        console.log("📊 Total docs:", snapshot.size);
+        console.log('📊 Total docs:', snapshot.size);
 
-        snapshot.forEach(doc => {
-          console.log("🔥 DOC:", doc.id, doc.data());
+        snapshot.forEach((doc) => {
+          console.log('🔥 DOC:', doc.id, doc.data());
         });
 
-        const data = snapshot.docs.map(doc => ({
+        const data = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
@@ -43,7 +43,7 @@ const RestaurantList = () => {
         setRestaurants(data);
         setFilteredRestaurants(data);
       } catch (err) {
-        console.error("❌ Firebase error:", err);
+        console.error('❌ Firebase error:', err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -61,8 +61,8 @@ const RestaurantList = () => {
     }
 
     const lowerCaseQuery = searchQuery.toLowerCase();
-    
-    const filtered = restaurants.filter(restaurant => {
+
+    const filtered = restaurants.filter((restaurant) => {
       if (activeFilter === 'name') {
         return restaurant.name?.toLowerCase().includes(lowerCaseQuery);
       } else if (activeFilter === 'location') {
@@ -74,7 +74,7 @@ const RestaurantList = () => {
         );
       }
     });
-    
+
     setFilteredRestaurants(filtered);
   }, [searchQuery, restaurants, activeFilter]);
 
@@ -101,7 +101,9 @@ const RestaurantList = () => {
     return (
       <View style={styles.center}>
         <Text style={styles.error}>Error: {error}</Text>
-        <Text style={styles.errorHelp}>Please check your internet connection</Text>
+        <Text style={styles.errorHelp}>
+          Please check your internet connection
+        </Text>
       </View>
     );
   }
@@ -111,7 +113,12 @@ const RestaurantList = () => {
       {/* Search Header */}
       <View style={styles.searchContainer}>
         <View style={styles.searchInputContainer}>
-          <Icon name="search" size={20} color="#555" style={styles.searchIcon} />
+          <Icon
+            name="search"
+            size={20}
+            color="#555"
+            style={styles.searchIcon}
+          />
           <TextInput
             style={styles.searchInput}
             placeholder="Search by name or location..."
@@ -126,36 +133,60 @@ const RestaurantList = () => {
             </TouchableOpacity>
           )}
         </View>
-        
+
         {/* Filter Buttons */}
-        <ScrollView 
-          horizontal 
+        <ScrollView
+          horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.filterContainer}
         >
-          <TouchableOpacity 
-            style={[styles.filterButton, activeFilter === 'all' && styles.activeFilter]}
+          <TouchableOpacity
+            style={[
+              styles.filterButton,
+              activeFilter === 'all' && styles.activeFilter,
+            ]}
             onPress={() => setActiveFilter('all')}
           >
-            <Text style={[styles.filterText, activeFilter === 'all' && styles.activeFilterText]}>
+            <Text
+              style={[
+                styles.filterText,
+                activeFilter === 'all' && styles.activeFilterText,
+              ]}
+            >
               All
             </Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={[styles.filterButton, activeFilter === 'name' && styles.activeFilter]}
+
+          <TouchableOpacity
+            style={[
+              styles.filterButton,
+              activeFilter === 'name' && styles.activeFilter,
+            ]}
             onPress={() => setActiveFilter('name')}
           >
-            <Text style={[styles.filterText, activeFilter === 'name' && styles.activeFilterText]}>
+            <Text
+              style={[
+                styles.filterText,
+                activeFilter === 'name' && styles.activeFilterText,
+              ]}
+            >
               Name
             </Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={[styles.filterButton, activeFilter === 'location' && styles.activeFilter]}
+
+          <TouchableOpacity
+            style={[
+              styles.filterButton,
+              activeFilter === 'location' && styles.activeFilter,
+            ]}
             onPress={() => setActiveFilter('location')}
           >
-            <Text style={[styles.filterText, activeFilter === 'location' && styles.activeFilterText]}>
+            <Text
+              style={[
+                styles.filterText,
+                activeFilter === 'location' && styles.activeFilterText,
+              ]}
+            >
               Location
             </Text>
           </TouchableOpacity>
@@ -166,7 +197,8 @@ const RestaurantList = () => {
       {searchQuery.length > 0 && (
         <View style={styles.resultsContainer}>
           <Text style={styles.resultsText}>
-            {filteredRestaurants.length} restaurant{filteredRestaurants.length !== 1 ? 's' : ''} found
+            {filteredRestaurants.length} restaurant
+            {filteredRestaurants.length !== 1 ? 's' : ''} found
           </Text>
         </View>
       )}
@@ -177,13 +209,15 @@ const RestaurantList = () => {
           <Icon name="search-off" size={50} color="#ccc" />
           <Text style={styles.emptyText}>No restaurants found.</Text>
           <Text style={styles.emptySubtext}>
-            {searchQuery.length > 0 ? 'Try a different search term' : 'No restaurants available'}
+            {searchQuery.length > 0
+              ? 'Try a different search term'
+              : 'No restaurants available'}
           </Text>
         </View>
       ) : (
         <FlatList
           data={filteredRestaurants}
-          keyExtractor={item => item.id}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => <RestaurantCard restaurant={item} />}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
@@ -256,33 +290,33 @@ const styles = StyleSheet.create({
     color: '#389c9a',
     fontSize: 14,
   },
-  center: { 
-    flex: 1, 
-    justifyContent: 'center', 
-    alignItems: 'center', 
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#f8f8f8',
     padding: 20,
   },
-  loadingText: { 
-    marginTop: 10, 
-    color: '#555', 
+  loadingText: {
+    marginTop: 10,
+    color: '#555',
     fontSize: 16,
   },
-  error: { 
-    color: '#E64848', 
-    fontSize: 16, 
-    fontWeight: '600', 
+  error: {
+    color: '#E64848',
+    fontSize: 16,
+    fontWeight: '600',
     textAlign: 'center',
     marginBottom: 8,
   },
-  errorHelp: { 
-    color: '#555', 
-    fontSize: 14, 
+  errorHelp: {
+    color: '#555',
+    fontSize: 14,
     textAlign: 'center',
   },
-  emptyText: { 
-    fontSize: 18, 
-    color: '#555', 
+  emptyText: {
+    fontSize: 18,
+    color: '#555',
     marginTop: 12,
     fontWeight: '500',
   },
@@ -292,7 +326,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     textAlign: 'center',
   },
-  list: { 
+  list: {
     padding: 16,
   },
 });
