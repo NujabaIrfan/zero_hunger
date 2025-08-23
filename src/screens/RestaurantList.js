@@ -14,8 +14,11 @@ import { db } from '../../firebaseConfig';
 import RestaurantCard from '../components/RestaurantCard';
 import { collection, getDocs } from 'firebase/firestore';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
 
 const RestaurantList = () => {
+  const navigation = useNavigation();
+
   const [restaurants, setRestaurants] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,37 +26,52 @@ const RestaurantList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
 
+  // 🔹 Setup navigation header style + profile icon
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Donors',
+      headerStyle: {
+        backgroundColor: '#389c9a',
+        elevation: 0, // Android shadow
+        shadowOpacity: 0, // iOS shadow
+      },
+      headerTintColor: '#fff', // back arrow / text color
+      headerTitleStyle: {
+        fontWeight: 'bold',
+        fontSize: 20,
+      },
+      headerRight: () => (
+        <TouchableOpacity
+          style={{ marginRight: 15 }}
+          onPress={() => navigation.navigate('donorSignUp')} // 👈 Navigate to DonorSignUp screen
+        >
+          <Icon name="account-circle" size={28} color="#fff" />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
+
+  // 🔹 Fetch Restaurants
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        console.log('📡 Fetching restaurants...');
         const snapshot = await getDocs(collection(db, 'restaurant'));
-
-        console.log('📊 Total docs:', snapshot.size);
-
-        snapshot.forEach((doc) => {
-          console.log('🔥 DOC:', doc.id, doc.data());
-        });
-
         const data = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-
         setRestaurants(data);
         setFilteredRestaurants(data);
       } catch (err) {
-        console.error('❌ Firebase error:', err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-
     fetchRestaurants();
   }, []);
 
-  // Filter restaurants based on search query
+  // 🔹 Filter
   useEffect(() => {
     if (searchQuery === '') {
       setFilteredRestaurants(restaurants);
@@ -61,7 +79,6 @@ const RestaurantList = () => {
     }
 
     const lowerCaseQuery = searchQuery.toLowerCase();
-
     const filtered = restaurants.filter((restaurant) => {
       if (activeFilter === 'name') {
         return restaurant.name?.toLowerCase().includes(lowerCaseQuery);
@@ -78,14 +95,11 @@ const RestaurantList = () => {
     setFilteredRestaurants(filtered);
   }, [searchQuery, restaurants, activeFilter]);
 
-  const handleSearch = (text) => {
-    setSearchQuery(text);
-  };
-
+  const handleSearch = (text) => setSearchQuery(text);
   const clearSearch = () => {
     setSearchQuery('');
     setActiveFilter('all');
-    Keyboard.dismiss(); // Dismiss keyboard when clearing search
+    Keyboard.dismiss();
   };
 
   if (loading) {
@@ -110,22 +124,16 @@ const RestaurantList = () => {
 
   return (
     <View style={styles.container}>
-      {/* Search Header */}
+      {/* 🔎 Search Bar */}
       <View style={styles.searchContainer}>
         <View style={styles.searchInputContainer}>
-          <Icon
-            name="search"
-            size={20}
-            color="#555"
-            style={styles.searchIcon}
-          />
+          <Icon name="search" size={20} color="#555" style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
             placeholder="Search by name or location..."
             placeholderTextColor="#888"
             value={searchQuery}
             onChangeText={handleSearch}
-            underlineColorAndroid="transparent" // Removes underline on Android
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={clearSearch} style={styles.clearButton}>
@@ -140,56 +148,25 @@ const RestaurantList = () => {
           showsHorizontalScrollIndicator={false}
           style={styles.filterContainer}
         >
-          <TouchableOpacity
-            style={[
-              styles.filterButton,
-              activeFilter === 'all' && styles.activeFilter,
-            ]}
-            onPress={() => setActiveFilter('all')}
-          >
-            <Text
+          {['all', 'name', 'location'].map((filter) => (
+            <TouchableOpacity
+              key={filter}
               style={[
-                styles.filterText,
-                activeFilter === 'all' && styles.activeFilterText,
+                styles.filterButton,
+                activeFilter === filter && styles.activeFilter,
               ]}
+              onPress={() => setActiveFilter(filter)}
             >
-              All
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.filterButton,
-              activeFilter === 'name' && styles.activeFilter,
-            ]}
-            onPress={() => setActiveFilter('name')}
-          >
-            <Text
-              style={[
-                styles.filterText,
-                activeFilter === 'name' && styles.activeFilterText,
-              ]}
-            >
-              Name
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.filterButton,
-              activeFilter === 'location' && styles.activeFilter,
-            ]}
-            onPress={() => setActiveFilter('location')}
-          >
-            <Text
-              style={[
-                styles.filterText,
-                activeFilter === 'location' && styles.activeFilterText,
-              ]}
-            >
-              Location
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={[
+                  styles.filterText,
+                  activeFilter === filter && styles.activeFilterText,
+                ]}
+              >
+                {filter.charAt(0).toUpperCase() + filter.slice(1)}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
       </View>
 
@@ -228,10 +205,7 @@ const RestaurantList = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f8f8f8',
-  },
+  container: { flex: 1, backgroundColor: '#f8f8f8' },
   searchContainer: {
     backgroundColor: '#fff',
     padding: 16,
@@ -246,24 +220,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginBottom: 12,
   },
-  searchIcon: {
-    marginRight: 8,
-  },
-  searchInput: {
-    flex: 1,
-    height: 45,
-    fontSize: 16,
-    color: '#1d1d1d',
-    // These properties remove the blue highlight/underline on focus
-    borderWidth: 0,
-    outlineStyle: 'none', // For web if using React Native Web
-  },
-  clearButton: {
-    padding: 4,
-  },
-  filterContainer: {
-    flexDirection: 'row',
-  },
+  searchIcon: { marginRight: 8 },
+  searchInput: { flex: 1, height: 45, fontSize: 16, color: '#1d1d1d' },
+  clearButton: { padding: 4 },
+  filterContainer: { flexDirection: 'row' },
   filterButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -271,25 +231,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     marginRight: 10,
   },
-  activeFilter: {
-    backgroundColor: '#389c9a',
-  },
-  filterText: {
-    color: '#555',
-    fontWeight: '500',
-  },
-  activeFilterText: {
-    color: '#fff',
-  },
+  activeFilter: { backgroundColor: '#389c9a' },
+  filterText: { color: '#555', fontWeight: '500' },
+  activeFilterText: { color: '#fff' },
   resultsContainer: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     backgroundColor: '#e6f7f7',
   },
-  resultsText: {
-    color: '#389c9a',
-    fontSize: 14,
-  },
+  resultsText: { color: '#389c9a', fontSize: 14 },
   center: {
     flex: 1,
     justifyContent: 'center',
@@ -297,11 +247,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
     padding: 20,
   },
-  loadingText: {
-    marginTop: 10,
-    color: '#555',
-    fontSize: 16,
-  },
+  loadingText: { marginTop: 10, color: '#555', fontSize: 16 },
   error: {
     color: '#E64848',
     fontSize: 16,
@@ -309,26 +255,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 8,
   },
-  errorHelp: {
-    color: '#555',
-    fontSize: 14,
-    textAlign: 'center',
-  },
-  emptyText: {
-    fontSize: 18,
-    color: '#555',
-    marginTop: 12,
-    fontWeight: '500',
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: '#888',
-    marginTop: 4,
-    textAlign: 'center',
-  },
-  list: {
-    padding: 16,
-  },
+  errorHelp: { color: '#555', fontSize: 14, textAlign: 'center' },
+  emptyText: { fontSize: 18, color: '#555', marginTop: 12, fontWeight: '500' },
+  emptySubtext: { fontSize: 14, color: '#888', marginTop: 4, textAlign: 'center' },
+  list: { padding: 16 },
 });
 
 export default RestaurantList;

@@ -7,6 +7,9 @@ import Signup from './src/screens/Signup';
 import RestaurantList from './src/screens/RestaurantList';
 import Organizations from './src/screens/Organizations';
 import Organization from './src/screens/Organization';
+import DonorSignUp from './src/screens/DonorSignUp';
+import Toast from 'react-native-toast-message';
+
 
 const RootStack = createNativeStackNavigator({
   initialRouteName: 'home',
@@ -17,13 +20,19 @@ const RootStack = createNativeStackNavigator({
     restaurantList: RestaurantList,
     organizations: Organizations,
     organization: Organization,
+    donorSignUp: DonorSignUp
   },
 });
 
 const Navigation = createStaticNavigation(RootStack);
 
 export default function App() {
-  return <Navigation />;
+  return (
+    <>
+      <Navigation />
+      <Toast />
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
