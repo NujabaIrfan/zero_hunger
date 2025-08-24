@@ -100,6 +100,36 @@ export default function Home() {
             </View>
           </View>
         </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.serviceCard, styles.secondaryService]}
+          onPress={() => navigator.navigate('organization')}
+        >
+          <View style={styles.serviceContent}>
+            <View style={styles.serviceInfo}>
+              <Text style={styles.serviceTitle}>Organization </Text>
+              <Text style={styles.serviceDescription}>Your organization can coordinate donation efforts and resource management</Text>
+            </View>
+            <View style={styles.serviceArrow}>
+              <Text style={styles.arrowText}>›</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+
+         <TouchableOpacity 
+          style={[styles.serviceCard, styles.secondaryService]}
+          onPress={() => navigator.navigate('organizations')}
+        >
+          <View style={styles.serviceContent}>
+            <View style={styles.serviceInfo}>
+              <Text style={styles.serviceTitle}>Organizations</Text>
+              <Text style={styles.serviceDescription}>Your organization can coordinate donation efforts and resource management</Text>
+            </View>
+            <View style={styles.serviceArrow}>
+              <Text style={styles.arrowText}>›</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
         
         <TouchableOpacity 
           style={[styles.serviceCard, styles.tertiaryService]}
