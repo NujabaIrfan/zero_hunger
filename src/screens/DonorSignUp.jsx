@@ -36,7 +36,7 @@ const DonorSignUp = () => {
 
   useEffect(() => {
     navigation.setOptions({
-      title: "Donors",
+      title: "Donor Sign Up",
       headerStyle: {
         backgroundColor: "#389c9a",
         elevation: 0,
