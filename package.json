@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
@@ -17,6 +17,7 @@
     "@react-navigation/native-stack": "^7.3.25",
     "bcrypt": "^6.0.0",
     "expo": "~53.0.20",
+    "expo-checkbox": "~4.1.4",
     "expo-status-bar": "~2.2.3",
     "firebase": "^12.1.0",
     "react": "19.0.0",
@@ -28,6 +29,7 @@
     "react-native-safe-area-context": "^5.4.0",
     "react-native-screens": "~4.11.1",
     "react-native-toast-message": "^2.3.3",
+    "react-native-ui-datepicker": "^3.1.2",
     "react-native-web": "^0.20.0"
   },
   "devDependencies": {
