@@ -9,7 +9,7 @@ import Organizations from './src/screens/Organizations';
 import Organization from './src/screens/Organization';
 import DonorSignUp from './src/screens/DonorSignUp';
 import Toast from 'react-native-toast-message';
-
+import CreateEvent from './src/screens/CreateEvent';
 
 const RootStack = createNativeStackNavigator({
   initialRouteName: 'home',
@@ -20,7 +20,8 @@ const RootStack = createNativeStackNavigator({
     restaurantList: RestaurantList,
     organizations: Organizations,
     organization: Organization,
-    donorSignUp: DonorSignUp
+    createEvent: CreateEvent,
+    donorSignUp: DonorSignUp,
   },
 });
 
