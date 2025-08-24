@@ -12,11 +12,12 @@ import {
 
 import { launchImageLibrary } from 'react-native-image-picker';
 import DateTimePicker from 'react-native-ui-datepicker';
+import MapView, { Marker, Polygon, UrlTile } from 'react-native-maps';
 
 export default function CreateEvent() {
   const [image, setImage] = useState(require('../../assets/default-image.jpg'));
   const [eventDateTime, setEventDateTime] = useState(new Date());
-  const [hasPhysicalVenue, setHasPhysicalVenue] = useState(false);
+  const [hasPhysicalVenue, setHasPhysicalVenue] = useState(true);
 
   const uploadImage = async () => {
     let res = await launchImageLibrary({
@@ -60,7 +61,7 @@ export default function CreateEvent() {
         <View style={[styles.flexRow, { gap: 5 }]}>
           <Checkbox
             value={hasPhysicalVenue}
-            onChange={() => setHasPhysicalVenue(!hasPhysicalVenue)}
+            onValueChange={setHasPhysicalVenue}
           />
           <Text style={[styles.infoText, { fontSize: 14 }]}>
             This event has a physical venue
@@ -71,14 +72,39 @@ export default function CreateEvent() {
       {hasPhysicalVenue && (
         <View>
           <Text style={styles.infoText}>Please select a venue below.</Text>
-          <MapView
-            initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-          />
+           <MapView
+        style={{ flex: 1, width: "100%", height: 300 }}
+        initialRegion={{
+          latitude: 37.78825,
+          longitude: -122.4324,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        }}
+      >
+        {/* OpenStreetMap tiles */}
+        <UrlTile
+          urlTemplate="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          maximumZ={19}
+        />
+
+        {/* Example marker */}
+        <Marker coordinate={{ latitude: 37.78825, longitude: -122.4324 }} />
+
+        {/* Example polygon */}
+        <Polygon
+          coordinates={[
+            { latitude: 37.78825, longitude: -122.4324 },
+            { latitude: 37.78825, longitude: -122.4224 },
+            { latitude: 37.79825, longitude: -122.4224 },
+            { latitude: 37.79825, longitude: -122.4324 },
+          ]}
+          strokeColor="#389c9a"
+          fillColor="rgba(56,156,154,0.3)"
+          strokeWidth={2}
+        />
+      </MapView>
+            
+          
         </View>
       )}
 
